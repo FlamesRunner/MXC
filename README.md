@@ -17,6 +17,6 @@ Here's what it won't do:
 
 This project does have a Trello board for task management: https://trello.com/b/PUd3mQKr/mxc
 
-You're free to leave comments & suggestions there in the appropriate card; I will make sure to take into account any feature requests and will implement them on a case-by-case basis.
+You're free to leave comments & suggestions there in the appropriate card; I appreciate all feedback so if you have anythiing to say, please tell me! In addition, I will take into account any feature requests and will implement them on a case-by-case basis.
 
 There's currently no timeline for an alpha release, but I expect to have a testable version of this ready by the end of May (I am quite busy and am developing this on the side).
