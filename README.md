@@ -1,4 +1,4 @@
-# MXC
+# MXC (MX-control)
 Control panel for hosted email with DirectAdmin.
 
 This project is meant to provide a clean, easy interface for providers wanting to offer hosted email services with DirectAdmin as its backend. Here's what it will do eventually:
