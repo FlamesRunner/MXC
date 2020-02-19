@@ -1,5 +1,5 @@
 # MXC (MX-control)
-Control panel for hosted email with DirectAdmin.
+Control panel for hosted email with DirectAdmin. It is built with Laravel, a PHP framework which allows it to be installed on most shared hosting systems. However, you will require NodeJS if you want to compile any style changes.
 
 This project is meant to provide a clean, easy interface for providers wanting to offer hosted email services with DirectAdmin as its backend. Here's what it will do eventually:
 
