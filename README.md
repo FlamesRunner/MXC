@@ -16,6 +16,7 @@ Here's what it won't do:
 - Any hand-holding. Basic support will be provided, but don't expect me to answer any issues at 3 o'clock in the morning. In other words, don't be an d-ck and I'll be happy to help.
 
 This project does have a Trello board for task management: https://trello.com/b/PUd3mQKr/mxc
+
 You're free to leave comments & suggestions there in the appropriate card; I will make sure to take into account any feature requests and will implement them on a case-by-case basis.
 
 There's currently no timeline for an alpha release, but I expect to have a testable version of this ready by the end of May (I am quite busy and am developing this on the side).
