@@ -15,18 +15,51 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">-->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <!--<link href="{{ asset('css/app.css') }}" rel="stylesheet">-->
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        @media only screen and (max-width: 600px) {
+            figure {
+                display: inline-block;
+                text-align: center;
+                padding-right: 10px;
+                width: 25%;
+            }
+            .options {
+                flex-direction: row;
+                display: flex;
+            }
+        }
+        @media only screen and (min-width: 600px) {
+            figure {
+                display: inline-block;
+                text-align: center;
+                padding-right: 20px;
+                width: 25%;
+                min-width: 75px;
+            }
+            .options {
+                flex-direction: row;
+                display: flex;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'MXC') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -35,7 +68,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+			@guest
+			@else
+				<li class="nav-item"><a class="nav-link" href="{{ route('accounts.list') }}">{{ __('Your accounts') }}</a>
+			@endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
