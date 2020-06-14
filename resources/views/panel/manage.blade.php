@@ -4,10 +4,10 @@
 @extends('panel.domainsModal', ['accountID' => $account[0]->id])
 @extends('panel.dkimModal', ['accountID' => $account[0]->id])
 @extends('panel.spfModal', ['accountID' => $account[0]->id])
+@extends('panel.popModal', ['accountID' => $account[0]->id]);
 @extends('panel.externalClientModal', ['server_hostname' => $account[5]->hostname])
 
 <div class="container">
-    <br />
     <div class="row">
         <div class="col col-md-10">
             <h3><b>Your account ({{ $account[0]->username }})</b></h3>
@@ -27,33 +27,33 @@
                     <div class="card-title"><h4>Usage details</h4></div>
                     <hr>
                     <!-- Disk usage -->
-                    <span style="font-size: 8pt">Disk usage ({{ (round($account[1]["quota"] * 100)/100)}}MB/{{ $account[2]["quota"] }}MB)</span>
+                    <span style="font-size: 8pt">Disk usage <span id="diskUsage">({{ (round($account[1]["quota"] * 100)/100)}}MB/{{ $account[2]["quota"] }}MB)</span></span>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $account[3]['disk'] }}%" aria-valuenow="{{ $account[3]['disk'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="diskPercentage" class="progress-bar" role="progressbar" style="width: {{ $account[3]['disk'] }}%" aria-valuenow="{{ $account[3]['disk'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <!-- Domain usage -->
                     <div style="padding-top: 10px"></div>
-                    <span style="font-size: 8pt">Hosted domains ({{ $account[1]["vdomains"] }}/{{ $account[2]["vdomains"] }})</span>
+                    <span style="font-size: 8pt">Hosted domains <span id="domainUsage">({{ $account[1]["vdomains"] }}/{{ $account[2]["vdomains"] }})</span></span>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $account[3]['domains'] }}%" aria-valuenow="{{ $account[3]['domains'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="domainPercentage" class="progress-bar" role="progressbar" style="width: {{ $account[3]['domains'] }}%" aria-valuenow="{{ $account[3]['domains'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <!-- Subdomain usage -->
                     <div style="padding-top: 10px"></div>
-                    <span style="font-size: 8pt">Subdomains ({{ $account[1]["nsubdomains"] }}/{{ $account[2]["nsubdomains"] }})</span>
+                    <span style="font-size: 8pt">Subdomains <span id="subdomainUsage">({{ $account[1]["nsubdomains"] }}/{{ $account[2]["nsubdomains"] }})</span></span>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $account[3]['subdomains'] }}%" aria-valuenow="{{ $account[3]['subdomains'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="subdomainPercentage" class="progress-bar" role="progressbar" style="width: {{ $account[3]['subdomains'] }}%" aria-valuenow="{{ $account[3]['subdomains'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <!-- Forwarder usage -->
                     <div style="padding-top: 10px"></div>
-                    <span style="font-size: 8pt">Mail forwarders ({{ $account[1]["nemailf"] }}/{{ $account[2]["nemailf"] }})</span>
+                    <span style="font-size: 8pt">Mail forwarders <span id="forwarderUsage">({{ $account[1]["nemailf"] }}/{{ $account[2]["nemailf"] }})</span></span>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $account[3]['forwarders'] }}%" aria-valuenow="{{ $account[3]['forwarders'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="forwarderPercentage" class="progress-bar" role="progressbar" style="width: {{ $account[3]['forwarders'] }}%" aria-valuenow="{{ $account[3]['forwarders'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <!-- Email account usage -->
                     <div style="padding-top: 10px"></div>
-                    <span style="font-size: 8pt">Hosted email accounts ({{ $account[1]["nemails"] }}/{{ $account[2]["nemails"] }})</span>
+                    <span style="font-size: 8pt">Hosted email accounts <span id="accountUsage">({{ $account[1]["nemails"] }}/{{ $account[2]["nemails"] }})</span></span>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ $account[3]['accounts'] }}%" aria-valuenow="{{ $account[3]['accounts'] }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div id="accountPercentage" class="progress-bar" role="progressbar" style="width: {{ $account[3]['accounts'] }}%" aria-valuenow="{{ $account[3]['accounts'] }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <div style="padding-top: 10px"></div>
                 </div>
@@ -105,7 +105,7 @@
                             </a>
                         </figure>
                         <figure>
-                            <a href="#" style="color: black">
+                            <a href="#" data-toggle="modal" style="color: black" data-target="#popModal">
                                 <img src="/img/002-envelope.png" style="width: 48px; height: 48px" />
                                 <figcaption>Email addresses</figcaption>
                             </a>
@@ -141,7 +141,7 @@
                 </div>
             </div>
             <br />
-            <div class="card" style="padding-bottom: 7px">
+            <div class="card" style="padding-bottom: 3px">
                 <div class="card-body">
                     <div class="card-title"><h4>Mail client</h4></div>
                     <hr>
@@ -179,4 +179,24 @@
     <br />
     <p style="font-size: 10px">Credit: Some icons designed by <a target="_blank" href="https://www.flaticon.com/">Flaticon</a>; RoundCube, CrossBox and Rainloop's icons are property of their respective owners.</p>
 </div>
+
+<script>
+    function refresh_usage() {
+        let url = "{{ route('accounts.usage', ['accountID' => $account[0]]) }}";
+        $.get(url, function(data) {
+            var usage_data = JSON.parse(data);
+            $("#diskPercentage").css('width', usage_data.percentages.disk + "%");
+            $("#forwarderPercentage").css('width', usage_data.percentages.forwarders + "%");
+            $("#accountPercentage").css('width', usage_data.percentages.accounts + "%");
+            $("#domainPercentage").css('width', usage_data.percentages.domains + "%");
+            $("#subdomainPercentage").css('width', usage_data.percentages.subdomains + "%");
+            $("#diskUsage").html("(" + usage_data.usage.quota + 'MB/' + usage_data.limits.quota + "MB)");
+            $("#forwarderUsage").html("(" + usage_data.usage.nemailf + '/' + usage_data.limits.nemailf + ")");
+            $("#accountUsage").html("(" + usage_data.usage.nemails + '/' + usage_data.limits.nemails + ")");
+            $("#domainUsage").html("(" + usage_data.usage.vdomains + '/' + usage_data.limits.vdomains + ")");
+            $("#subdomainUsage").html("(" + usage_data.usage.nsubdomains + '/' + usage_data.limits.nsubdomains + ")");
+        });
+    }
+    setInterval(refresh_usage, 5000);
+</script>
 @endsection
