@@ -13,6 +13,7 @@
 			<input name="password" value="{{ $data[1] }}" type="hidden" />
 		</form>
 	</body>
+	<p>Please wait, you should be redirected in a few moments.</p>
 	<script type="text/javascript">
 		(function() {
 			document.getElementById("ssoform").submit();

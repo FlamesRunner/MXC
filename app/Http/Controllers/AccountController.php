@@ -364,14 +364,6 @@ class AccountController extends Controller
         $account = DAAccount::where('id', $accountID)->first();
         $serverObject = DAServer::where('id', $account->serverID)->first();
 
-        /*$da = new DirectAdmin();
-        $da->connect("ssl://" . $serverObject->hostname, 2222);
-        $da->set_login($serverObject->username . "|" . $account->username, $serverObject->apikey);
-
-        $da->query('/CMD_API_DNS_CONTROL?domain=' . $request->input("domain") . '&info=no&urlencoded=yes');
-        //die(var_dump(urldecode($da->fetch_body())));
-        $spf_temp = str_replace('"', '', strstr(substr(explode("\n", urldecode($da->fetch_body()))[5], 4), '"'));
-        $spf = substr($spf_temp, 0, strpos($spf_temp, '&x._domainkey'));*/
         $spf = env('SPF_STRING', 'v=spf1 include:mxlogin.com -all');
 
         return json_encode(array("status" => "success", "key" => $spf));
@@ -508,7 +500,6 @@ class AccountController extends Controller
             "keyname" => substr(md5(mt_rand(0, mt_getrandmax()) / mt_getrandmax()), 0, 10), 
             "key" => $new_key, 
             "key2" => $new_key,
-            //"type" => "one_time_url",
             "never_expires" => "no",
             "expiry_timestamp" => time() + 3600,
             "max_uses" => "0",
@@ -577,13 +568,6 @@ class AccountController extends Controller
         parse_str(urldecode($da->fetch_body()), $domains);
 
         $email_accounts = array();
-        /*foreach($domains["list"] as $domain) {
-            $query = $da->query('/CMD_API_POP', http_build_query(array("action" => "list", "domain" => $domain)));
-            parse_str(urldecode($da->fetch_body()), $email_acc_temp);
-            foreach ($email_acc_temp["list"] as $single_email_acc) {
-                array_push($email_accounts, $single_email_acc . "@" . $domain);
-            }
-        }*/
 
         return view('panel.manage')->with('account', array($account, $usage_arr, $limits_arr, $usage_percentages, $email_accounts, $serverObject)); 
     }
