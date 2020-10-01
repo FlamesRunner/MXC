@@ -372,7 +372,7 @@ class AccountController extends Controller
         //die(var_dump(urldecode($da->fetch_body())));
         $spf_temp = str_replace('"', '', strstr(substr(explode("\n", urldecode($da->fetch_body()))[5], 4), '"'));
         $spf = substr($spf_temp, 0, strpos($spf_temp, '&x._domainkey'));*/
-        $spf = "v=spf1 include:mxlogin.com -all";
+        $spf = env('SPF_STRING', 'v=spf1 include:mxlogin.com -all');
 
         return json_encode(array("status" => "success", "key" => $spf));
     }
