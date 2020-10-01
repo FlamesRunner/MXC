@@ -46,6 +46,13 @@
     </div>
 </div>
 <script>
+    var error_array = {
+        "e4": '<div class="alert alert-danger">There was an error adding your domain. Please try again later.</div>',
+        "e3": '<div class="alert alert-warning">The domain already exists in the system. It cannot be added at this time.</div>',
+        "e2": '<div class="alert alert-warning">The domain entered is invalid.</div>',
+        "e1": '<div class="alert alert-warning">Insufficient permissions. This should not normally happen. Please contact support.</div>',
+        "e0": '<div class="alert alert-success">Your domain was added successfully. The domain list will refresh shortly.</div><br />',
+    };
     $("#createForm").submit(function(e) {
         e.preventDefault();
         var form = $(this);
@@ -66,19 +73,19 @@
             success: function(data) {
                 switch(data.trim()) {
                     case '-4':
-                        $("#responseArea").html('<div class="alert alert-danger">There was an error adding your domain. Please try again later.</div>');
+                        $("#responseArea").html(error_array["e4"]);
                         break;
                     case '-3':
-                        $("#responseArea").html('<div class="alert alert-warning">The domain already exists in the system. It cannot be added at this time.</div>');
+                        $("#responseArea").html(error_array["e3"]);
                         break;
                     case '-2':
-                        $("#responseArea").html('<div class="alert alert-warning">The domain entered is invalid.</div>');
+                        $("#responseArea").html(error_array["e2"]);
                         break;
                     case '-1':
-                        $("#responseArea").html('<div class="alert alert-warning">Insufficient permissions. This should not normally happen. Please contact support.</div>');
+                        $("#responseArea").html(error_array["e1"]);
                         break;
                     case '0':
-                        $("#responseArea").html('<div class="alert alert-success">Your domain was added successfully. The domain list will refresh shortly.</div><br />');
+                        $("#responseArea").html(error_array["e0"]);
                         $("nav").fadeOut(500);
                         $("#tblDomains").fadeOut(500).queue(function() {
                             $("#responseArea").fadeIn();
