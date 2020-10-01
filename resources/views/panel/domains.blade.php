@@ -111,6 +111,15 @@
         });
     });
 
+    var del_error_array = {
+        "e5": '<div class="alert alert-danger">This domain is protected; at least one domain must be present in your account at any time.</div>',
+        "e4": '<div class="alert alert-danger">There was an error removing your domain. Please try again later.</div>',
+        "e3": '<div class="alert alert-warning">The domain does not exist in the system. It cannot be removed at this time.</div>',
+        "e2": error_array["e2"],
+        "e1": error_array["e1"],
+        "e0": '<div class="alert alert-success">Your domain was removed successfully. The domain list will refresh shortly.</div><br />',
+    };
+
     function deleteDomain(domain) {
         $("input").attr('disabled', 'disabled');
         $("a").attr('disabled', 'disabled');
@@ -126,22 +135,22 @@
             success: function(data) {
                 switch(data.trim()) {
                     case '-5':
-                        $("#responseArea").html('<div class="alert alert-danger">This domain is protected; at least one domain must be present in your account at any time.</div>');
+                        $("#responseArea").html(del_error_array["e5"]);
                         break;
                     case '-4':
-                        $("#responseArea").html('<div class="alert alert-danger">There was an error removing your domain. Please try again later.</div>');
+                        $("#responseArea").html(del_error_array["e4"]);
                         break;
                     case '-3':
-                        $("#responseArea").html('<div class="alert alert-warning">The domain does not exist in the system. It cannot be removed at this time.</div>');
+                        $("#responseArea").html(del_error_array["e3"]);
                         break;
                     case '-2':
-                        $("#responseArea").html('<div class="alert alert-warning">The domain you entered is invalid.</div>');
+                        $("#responseArea").html(del_error_array["e2"]);
                         break;
                     case '-1':
-                        $("#responseArea").html('<div class="alert alert-warning">Insufficient permissions. This should not normally happen. Please contact support.</div>');
+                        $("#responseArea").html(del_error_array["e1"]);
                         break;
                     case '0':
-                        $("#responseArea").html('<div class="alert alert-success">Your domain was removed successfully. The domain list will refresh shortly.</div><br />');
+                        $("#responseArea").html(del_error_array["e0"]);
                         $("nav").fadeOut(500);
                         $("#tblDomains").fadeOut(500).queue(function() {
                             $("#responseArea").fadeIn();
@@ -152,7 +161,7 @@
                         });
                         break;
                     default:
-                        $("#responseArea").html('<div class="alert alert-warning">' + data + '</div>');
+                        $("#responseArea").html('<div class="alert alert-warning">' + data.trim() + '</div>');
                         break;
                 }
                 if (data.trim() != '0') {
